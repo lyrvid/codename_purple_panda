@@ -8,6 +8,7 @@ class ParcelSize(Enum):
     MEDIUM = auto()
     LARGE = auto()
     EXTRA_LARGE = auto()
+    HEAVY = auto()
 
 
 class Parcel(BaseModel):

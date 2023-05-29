@@ -46,3 +46,33 @@ def test_get_parcel_pricing_overweight_total():
 
     result = _get_parcel_pricing(ParcelInput(parcels=parcels, speedy_shipping=True))
     assert result.total == 10
+
+
+def test_get_parcel_pricing_when_heavy_is_cheaper():
+    parcels = [
+        Parcel(width=1, height=1, depth=1, weight=26),
+    ]
+
+    result = _get_parcel_pricing(ParcelInput(parcels=parcels))
+    assert result.total == 50
+
+    parcels = [
+        Parcel(width=10, height=10, depth=10, weight=24),
+    ]
+
+    result = _get_parcel_pricing(ParcelInput(parcels=parcels))
+    assert result.total == 50
+
+    parcels = [
+        Parcel(width=50, height=50, depth=50, weight=24),
+    ]
+
+    result = _get_parcel_pricing(ParcelInput(parcels=parcels))
+    assert result.total == 50
+
+    parcels = [
+        Parcel(width=100, height=100, depth=100, weight=23),
+    ]
+
+    result = _get_parcel_pricing(ParcelInput(parcels=parcels))
+    assert result.total == 50

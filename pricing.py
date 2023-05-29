@@ -13,6 +13,15 @@ PARCEL_SIZE_WEIGHT_LIMITS = {
     ParcelSize.MEDIUM: 3,
     ParcelSize.LARGE: 6,
     ParcelSize.EXTRA_LARGE: 10,
+    ParcelSize.HEAVY: 50,
+}
+
+PARCEL_SIZE_WEIGHT_PENALTY = {
+    ParcelSize.SMALL: 2,
+    ParcelSize.MEDIUM: 2,
+    ParcelSize.LARGE: 2,
+    ParcelSize.EXTRA_LARGE: 2,
+    ParcelSize.HEAVY: 1,
 }
 
 PARCEL_SIZE_TO_BASE_COST = {
@@ -20,6 +29,7 @@ PARCEL_SIZE_TO_BASE_COST = {
     ParcelSize.MEDIUM: 8,
     ParcelSize.LARGE: 15,
     ParcelSize.EXTRA_LARGE: 25,
+    ParcelSize.HEAVY: 50,
 }
 
 
@@ -35,15 +45,18 @@ def calculate_parcel_size(parcel: Parcel) -> ParcelSize:
     return PARCEL_SIZE_LIMITS[-1][0]
 
 
-def calculate_parcel_cost(parcel: Parcel) -> int:
-    size = calculate_parcel_size(parcel)
-    return PARCEL_SIZE_TO_BASE_COST[size]
+def calculate_parcel_cost(parcel: Parcel, size: ParcelSize = None) -> int:
+    size = size or calculate_parcel_size(parcel)
+    weight_penalty = calculate_weight_penalty(parcel, size)
+    cost = PARCEL_SIZE_TO_BASE_COST[size] + weight_penalty
+    return cost
 
 
-def calculate_weight_penalty(parcel: Parcel) -> int:
-    size = calculate_parcel_size(parcel)
+def calculate_weight_penalty(parcel: Parcel, size: ParcelSize = None) -> int:
+    size = size or calculate_parcel_size(parcel)
     limit = PARCEL_SIZE_WEIGHT_LIMITS[size]
+    penalty = PARCEL_SIZE_WEIGHT_PENALTY[size]
 
     if parcel.weight > limit:
-        return (parcel.weight - limit) * 2
+        return (parcel.weight - limit) * penalty
     return 0

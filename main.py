@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Response
-from schemas import Parcel, ParcelResponse, ParcelResponses, ParcelInput
+from schemas import Parcel, ParcelResponse, ParcelResponses, ParcelInput, ParcelSize
 from typing import List
 
 from pricing import calculate_parcel_size, calculate_parcel_cost, calculate_weight_penalty
@@ -16,11 +16,16 @@ def _get_parcel_pricing(
     for parcel in parcel_input.parcels:
         size = calculate_parcel_size(parcel)
         cost = calculate_parcel_cost(parcel)
-        weight_penalty = calculate_weight_penalty(parcel)
 
-        response = ParcelResponse(size=size, cost=cost, weight_penalty=weight_penalty)
+        heavy_cost = calculate_parcel_cost(parcel, ParcelSize.HEAVY)
+
+        if heavy_cost < cost:
+            cost = heavy_cost
+            size = ParcelSize.HEAVY
+
+        response = ParcelResponse(size=size, cost=cost)
         parcel_responses.append(response)
-        total += cost + weight_penalty
+        total += cost
 
     speedy_shipping = 0
     if parcel_input.speedy_shipping:
