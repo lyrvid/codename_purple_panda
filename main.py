@@ -21,7 +21,11 @@ def _get_parcel_pricing(
         parcel_responses.append(response)
         total += cost
 
-    return ParcelResponses(parcels=parcel_responses, total=total)
+    speedy_shipping = 0
+    if parcel_input.speedy_shipping:
+        speedy_shipping = total
+        total = total * 2
+    return ParcelResponses(parcels=parcel_responses, total=total, speedy_shipping=speedy_shipping)
 
 
 @app.post("/")

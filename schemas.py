@@ -27,10 +27,14 @@ class ParcelResponse(BaseModel):
 class ParcelResponses(BaseModel):
     parcels: List[ParcelResponse]
     total: int
+    speedy_shipping: int = 0
 
     def __str__(self):
-        return f'{" ".join((str(p) for p in self.parcels))} Total Cost: ${self.total}.'
+        return f'{" ".join((str(p) for p in self.parcels))} Speedy shipping Cost: ${self.speedy_shipping}. ' \
+               f'Total Cost: ${self.total}.'
 
 
 class ParcelInput(BaseModel):
     parcels: List[Parcel]
+    speedy_shipping: bool = False
+
