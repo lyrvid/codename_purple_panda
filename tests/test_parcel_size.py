@@ -1,4 +1,4 @@
-from models import Parcel, ParcelSize
+from schemas import Parcel, ParcelSize
 from pricing import calculate_parcel_size
 
 

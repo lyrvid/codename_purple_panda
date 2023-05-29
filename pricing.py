@@ -1,4 +1,4 @@
-from models import Parcel, ParcelSize
+from schemas import Parcel, ParcelSize
 
 
 PARCEL_SIZE_LIMITS = [
@@ -7,6 +7,14 @@ PARCEL_SIZE_LIMITS = [
     (ParcelSize.LARGE, 100),
     (ParcelSize.EXTRA_LARGE, -1),
 ]
+
+
+PARCEL_SIZE_TO_BASE_COST = {
+    ParcelSize.SMALL: 3,
+    ParcelSize.MEDIUM: 8,
+    ParcelSize.LARGE: 15,
+    ParcelSize.EXTRA_LARGE: 25,
+}
 
 
 def calculate_parcel_size(parcel: Parcel) -> ParcelSize:
@@ -19,3 +27,8 @@ def calculate_parcel_size(parcel: Parcel) -> ParcelSize:
 
     # Default to the largest possible size
     return PARCEL_SIZE_LIMITS[-1][0]
+
+
+def calculate_parcel_cost(parcel: Parcel) -> int:
+    size = calculate_parcel_size(parcel)
+    return PARCEL_SIZE_TO_BASE_COST[size]
