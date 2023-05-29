@@ -14,11 +14,13 @@ class Parcel(BaseModel):
     width: int
     height: int
     depth: int
+    weight: int = 0
 
 
 class ParcelResponse(BaseModel):
     size: ParcelSize
     cost: int
+    weight_penalty: int = 0
 
     def __str__(self):
         return f'{self.size.name} parcel: ${self.cost}.'

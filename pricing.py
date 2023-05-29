@@ -8,6 +8,12 @@ PARCEL_SIZE_LIMITS = [
     (ParcelSize.EXTRA_LARGE, -1),
 ]
 
+PARCEL_SIZE_WEIGHT_LIMITS = {
+    ParcelSize.SMALL: 1,
+    ParcelSize.MEDIUM: 3,
+    ParcelSize.LARGE: 6,
+    ParcelSize.EXTRA_LARGE: 10,
+}
 
 PARCEL_SIZE_TO_BASE_COST = {
     ParcelSize.SMALL: 3,
@@ -32,3 +38,12 @@ def calculate_parcel_size(parcel: Parcel) -> ParcelSize:
 def calculate_parcel_cost(parcel: Parcel) -> int:
     size = calculate_parcel_size(parcel)
     return PARCEL_SIZE_TO_BASE_COST[size]
+
+
+def calculate_weight_penalty(parcel: Parcel) -> int:
+    size = calculate_parcel_size(parcel)
+    limit = PARCEL_SIZE_WEIGHT_LIMITS[size]
+
+    if parcel.weight > limit:
+        return (parcel.weight - limit) * 2
+    return 0
