@@ -7,3 +7,6 @@ An API for posting parcels!
 3. cd to backend directory
 4. Run `poetry install` to install project dependencies
 5. Launch the backend API using the command `poetry run uvicorn main:app`
+
+## Tests
+Tests can be run with the command `poetry run pytest .` from the repo root
