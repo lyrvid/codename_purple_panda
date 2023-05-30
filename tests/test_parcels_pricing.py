@@ -76,3 +76,18 @@ def test_get_parcel_pricing_when_heavy_is_cheaper():
 
     result = _get_parcel_pricing(ParcelInput(parcels=parcels))
     assert result.total == 50
+
+
+def test_get_parcel_pricing_speedy_discount_total():
+    parcels = [
+        Parcel(width=1, height=1, depth=1),
+        Parcel(width=1, height=1, depth=1),
+        Parcel(width=1, height=1, depth=1),
+        Parcel(width=1, height=1, depth=1),
+    ]
+
+    result = _get_parcel_pricing(ParcelInput(parcels=parcels, speedy_shipping=False))
+    assert result.total == 9
+
+    result = _get_parcel_pricing(ParcelInput(parcels=parcels, speedy_shipping=True))
+    assert result.total == 18

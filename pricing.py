@@ -1,4 +1,5 @@
-from schemas import Parcel, ParcelSize
+from typing import List
+from schemas import Parcel, ParcelSize, ParcelResponse
 
 
 PARCEL_SIZE_LIMITS = [
@@ -60,3 +61,27 @@ def calculate_weight_penalty(parcel: Parcel, size: ParcelSize = None) -> int:
     if parcel.weight > limit:
         return (parcel.weight - limit) * penalty
     return 0
+
+
+def calculate_parcel_mania_discounts(parcels: List[ParcelResponse]) -> int:
+    small_parcels = list(filter(lambda p: p.size == ParcelSize.SMALL, parcels))
+    medium_parcels = list(filter(lambda p: p.size == ParcelSize.MEDIUM, parcels))
+
+    def get_lowest_cost_nth_parcel(
+        parcels: List[ParcelResponse], n: int
+    ) -> List[ParcelResponse]:
+        for i in range(0, len(parcels), n):
+            parcels_slice = parcels[i : i + n]
+            if len(parcels_slice) == n:
+                smallest_cost = sorted(parcels_slice, key=lambda p: p.cost)[0]
+                yield smallest_cost
+
+    free_small_parcels = set(get_lowest_cost_nth_parcel(small_parcels, 4))
+    free_medium_parcels = set(get_lowest_cost_nth_parcel(medium_parcels, 3))
+    free_mixed_parcels = set(get_lowest_cost_nth_parcel(parcels, 5))
+
+    unique_parcels = free_small_parcels.union(free_medium_parcels).union(
+        free_mixed_parcels
+    )
+
+    return sum(p.cost for p in unique_parcels)

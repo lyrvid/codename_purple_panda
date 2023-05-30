@@ -14,4 +14,3 @@ def test_parcel_cost():
 
     parcel = Parcel(width=100, height=100, depth=100)
     assert calculate_parcel_cost(parcel) == 25
-
