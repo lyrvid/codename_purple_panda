@@ -88,6 +88,9 @@ def test_get_parcel_pricing_speedy_discount_total():
 
     result = _get_parcel_pricing(ParcelInput(parcels=parcels, speedy_shipping=False))
     assert result.total == 9
+    assert result.discount == -3
 
     result = _get_parcel_pricing(ParcelInput(parcels=parcels, speedy_shipping=True))
     assert result.total == 18
+    # Includes speedy discount
+    assert result.discount == -6

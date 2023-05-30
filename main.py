@@ -37,6 +37,8 @@ def _get_parcel_pricing(parcel_input: ParcelInput):
     if parcel_input.speedy_shipping:
         speedy_shipping = total
         total = total * 2
+        parcel_mania_discount = parcel_mania_discount * 2
+
     return ParcelResponses(
         parcels=parcel_responses,
         total=total,
